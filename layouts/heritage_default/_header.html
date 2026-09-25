@@ -1,8 +1,12 @@
 @version(2)
-<!-- 머리 구조 (XE default 계보)
-     1행: 로고(왼쪽) + 유틸리티·검색(오른쪽)
-     2행: 화면을 가로지르는 짙은 GNB 바, 항목은 왼쪽부터, 사이에 세로 구분선 -->
 <header class="hr-header" id="hr_header">
+@php
+$hr_seller_center = '';
+if ($is_logged && class_exists('\Zittme\Modules\Commerce\Models\Seller') && method_exists('\Zittme\Modules\Commerce\Models\Seller', 'current') && \Zittme\Modules\Commerce\Models\Seller::current())
+{
+	$hr_seller_center = getUrl('', 'mid', '', 'act', 'dispCommerceSellerCenter');
+}
+@endphp
 
 	<div class="hr-utilrow">
 		<div class="hr-inner hr-utilrow-inner">
@@ -20,8 +24,6 @@
 			<div class="hr-utils">
 				@if ($is_logged)
 				@php
-				// 알림센터(ncenterlite) 헤더 연동 — 기본 플로팅 위젯은 끄고 레이아웃이 직접 그린다.
-				// 모듈이 없는 사이트에서는 벨 자체를 숨긴다
 				$hr_nc_items = [];
 				$hr_nc_unread = 0;
 				$hr_nc_on = false;
@@ -58,6 +60,12 @@
 				</div>
 				@endif
 				<a class="hr-util-link" href="{{ getUrl('', 'act', 'dispMemberInfo') }}">{{ $logged_info->nick_name }}</a>
+				@if ($hr_seller_center !== '')
+				<a class="hr-util-link hr-util-admin hr-util-seller" href="{{ $hr_seller_center }}" target="_blank" title="{{ lang('commerce.sc_title') }}">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16l1.5 5a3 3 0 0 1-5 2.2 3 3 0 0 1-5 0 3 3 0 0 1-5 0A3 3 0 0 1 2.5 9zm1 9.6a4.9 4.9 0 0 0 1 .1V20h4v-4h4v4h4v-6.3a4.9 4.9 0 0 0 1-.1V22H5z"/></svg>
+					<span>{{ lang('commerce.sc_title') }}</span>
+				</a>
+				@endif
 				@if ($logged_info->is_admin == 'Y')
 				<a class="hr-util-link hr-util-admin" href="{{ getUrl('', 'module', 'admin') }}" target="_blank" title="{{ $lang->hr_admin_page }}">
 					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.9 7.9 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.3 7.3 0 0 0-1.7-1l-.4-2.7a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.7a7.3 7.3 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.4 11a7.9 7.9 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5a.5.5 0 0 0 .6.2l2.5-1a7.3 7.3 0 0 0 1.7 1l.4 2.7a.5.5 0 0 0 .5.4h4a.5.5 0 0 0 .5-.4l.4-2.7a7.3 7.3 0 0 0 1.7-1l2.5 1a.5.5 0 0 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6zM12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5z"/></svg>
@@ -70,12 +78,10 @@
 				<a class="hr-util-link" href="{{ getUrl('', 'act', 'dispMemberSignUpForm') }}">{{ $lang->hr_signup }}</a>
 				@endif
 
-				{{-- 언어 전환: 코어에서 켜 둔 언어가 둘 이상일 때만 나온다 --}}
 				@php
 				$hr_langs = \Context::get('lang_supported');
 				$hr_langs = is_array($hr_langs) ? $hr_langs : [];
 				$hr_lang_now = \Context::getLangType();
-				// 보던 주소를 그대로 두고 l 값만 갈아 끼운다.
 				// getUrl() 은 재작성된 주소(/notice/123)를 복원하지 못해 대문으로 떨어진다.
 				$hr_lang_uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
 				$hr_lang_uri = preg_replace('/([?&])l=[^&]*/', '$1', $hr_lang_uri);
@@ -122,9 +128,6 @@
 		</div>
 	</div>
 
-	<!-- GNB 바: 항목 사이 세로 구분선.
-	     바에 마우스를 올리면 모든 1차 메뉴의 하위가 각자 아래 컬럼으로
-	     한꺼번에 펼쳐진다 (.gnb.open). -->
 	<div class="hr-navbar is-{{ $hr->gnb_width ?? 'boxed' }} c-{{ $hr->gnb_color ?? 'dark' }}" id="hr_navbar">
 		<nav class="hr-inner hr-gnb" aria-label="{{ $lang->hr_main_menu }}">
 			<ul class="hr-gnb-list">
@@ -164,6 +167,7 @@
 		<div class="hr-mobile-account">
 			@if ($is_logged)
 			<a class="hr-mobile-account-btn" href="{{ getUrl('', 'act', 'dispMemberInfo') }}">{{ $logged_info->nick_name }}</a>
+			@if ($hr_seller_center !== '')<a class="hr-mobile-account-btn" href="{{ $hr_seller_center }}" target="_blank">{{ lang('commerce.sc_title') }}</a>@endif
 			<a class="hr-mobile-account-btn" href="{{ getUrl('', 'act', 'dispMemberLogout') }}">{{ $lang->hr_logout }}</a>
 			@else
 			<a class="hr-mobile-account-btn is-primary" href="{{ getUrl('', 'act', 'dispMemberLoginForm') }}">{{ $lang->hr_login }}</a>
@@ -198,7 +202,6 @@
 			@endforeach
 		</ul>
 
-		{{-- 좁은 화면에서는 헤더에 로고가 설 자리가 없다. 관리자·언어·밝기를 여기로 모은다 --}}
 		<div class="hr-mobile-tools">
 			@if ($is_logged && $logged_info->is_admin == 'Y')
 			<a class="hr-mobile-tool" href="{{ getUrl('', 'module', 'admin') }}" target="_blank">

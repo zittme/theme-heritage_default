@@ -21,7 +21,7 @@ $hr_visual_boxed = ($hr->gnb_width ?? 'boxed') !== 'full';
 				@if (!empty($hr_v['title']))<h2>{!! hr_visual_text($hr_v['title']) !!}</h2>@endif
 				@if (!empty($hr_v['text']))<p>{!! hr_visual_text($hr_v['text']) !!}</p>@endif
 				@if (!empty($hr_v['link_url']) && !empty($hr_v['link_text']))
-				<a class="hr-btn hr-btn-primary hr-btn-lg" href="{{ $hr_v['link_url'] }}">{{ $hr_v['link_text'] }}</a>
+				<a class="hr-btn hr-btn-primary hr-btn-lg" href="{{ $hr_v['link_url'] }}"@if (($hr_v['link_target'] ?? '') === '_blank') target="_blank" rel="noopener"@endif>{{ $hr_v['link_text'] }}</a>
 				@endif
 			</div>
 		</div>

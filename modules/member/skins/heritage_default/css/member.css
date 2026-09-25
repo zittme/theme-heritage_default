@@ -1,8 +1,6 @@
 @charset "utf-8";
 
 .xm {
-    /* 레이아웃(heritage) 토큰을 따르고, 레이아웃 밖에서는 폴백을 쓴다.
-     * hover/light/soft 파생색은 color-mix 미지원 브라우저용 고정값 — 지원되면 아래 @supports 가 덮는다 */
     --zm-brand: var(--hr-brand, #6c5ce0);
     --zm-brand-hover: #5847c9;
     --zm-brand-light: #9a8bf0;
@@ -22,7 +20,6 @@
     word-break: keep-all;
     overflow-wrap: break-word;
 }
-/* 어두운 판의 색은 위에서 물려받은 hr 토큰이 알아서 바뀐다. 레이아웃 밖에서 쓰일 때만 여기 값이 쓰인다 */
 [data-theme="dark"] .xm {
     --zm-brand-soft: var(--hr-brand-soft, rgba(154, 139, 240, 0.16));
     --zm-bg: var(--hr-bg, #141822);
@@ -354,7 +351,6 @@
 .zmy-avatar { background: linear-gradient(135deg, var(--zm-brand-light, #9a8bf0), var(--zm-brand, #6c5ce0)); border-radius: 8px; }
 .zmy-nav a { border-radius: 6px; }
 
-/* 로그인 상자 간격 — 제목 밑줄과 입력칸, 로그인 유지와 버튼이 붙어 보이던 것 */
 .xm .signin .login-header h1 { padding-bottom: 12px; margin-bottom: 22px; }
 .xm .signin .control-group { margin-bottom: 14px; }
 .xm .signin .control-group:last-of-type { margin-bottom: 0; }
@@ -395,7 +391,6 @@
 .xm .member-sns-login-sep:before, .xm .member-sns-login-sep:after { content: ""; flex: 1; height: 1px; background: var(--zm-border); }
 .xm .member-sns-login-sep span { color: var(--zm-text-sub); font-size: 12px; white-space: nowrap; }
 .xm .member-sns-btn { display: block; padding: 11px; margin: 8px 0; text-align: center; text-decoration: none; border-radius: var(--zm-radius); font-weight: 700; font-size: 14px; text-transform: capitalize; }
-/* 각 서비스의 상징색이라 테마를 따르지 않는다 */
 .xm a.member-sns-btn.member-sns-kakao { background: #FEE500 !important; color: #3C1E1E !important; }
 .xm a.member-sns-btn.member-sns-naver { background: #03C75A !important; color: #fff !important; }
 .xm a.member-sns-btn.member-sns-google { background: #fff !important; color: #757575 !important; border: 1px solid #ddd; }
@@ -406,11 +401,17 @@
 .xm .xpress-editor > #smart_content,
 .xm .xpress-editor > #smart_content > .tool { clear: none; }
 .xm .zm-signup-steps span.done { background: var(--zm-brand-soft); color: var(--zm-brand); }
-/* 인증 후에는 약관을 접어서 표시 (체크 상태는 유지) */
 .xm .zm-agreements-collapsed .agreement .text { display: none; }
 .xm .zm-agreements-collapsed .agreement { margin-bottom: 8px; }
-/* 본인인증으로 잠긴 입력 */
 .xm .zm-identity-locked { opacity: .75; pointer-events: none; background: var(--zm-surface) !important; }
 
-.xm .member-sns-btn { width: 100%; max-width: 360px; box-sizing: border-box; }
-.xm .signin .login-body input[type="submit"].submit { max-width: 360px; }
+.xm .signin .login-body input[type="text"], .xm .signin .login-body input[type="password"], .xm .signin .login-body input[type="email"],
+.xm .signin .login-body input[type="submit"].submit, .xm .signin .member-sns-btn {
+    display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+    width: 100%; max-width: none; height: 46px; min-height: 46px; margin-left: 0; margin-right: 0; line-height: 1.4;
+}
+.xm .signin .login-body input[type="text"], .xm .signin .login-body input[type="password"], .xm .signin .login-body input[type="email"] { display: block; padding-top: 0; padding-bottom: 0; }
+.xm .signin .login-body input[type="submit"].submit { display: block; padding: 0 12px; }
+.xm .signin .member-sns-btn { padding: 0 12px; border: 1px solid transparent; }
+.xm .signin a.member-sns-btn.member-sns-google { border-color: #ddd; }
+.xm .signin .login-footer { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 18px; }

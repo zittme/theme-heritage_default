@@ -55,8 +55,6 @@
 	overflow-wrap: break-word;
 }
 
-/* 스크롤바. 파이어폭스는 두 값만 받고, 나머지는 아래 webkit 규칙이 맡는다.
- * 점 색은 layout.html 이 :root 에 심는다. 감싸는 요소에만 있으면 창 스크롤바까지 닿지 않는다 */
 html, .hr *, .hr-mobile * {
 	scrollbar-width: thin;
 	scrollbar-color: color-mix(in srgb, var(--hr-brand) 55%, transparent) transparent;
